@@ -8,12 +8,12 @@ setup(
     author='Lorenzo Bonicelli',
     author_email='loribonna@gmail.com',
     url='https://github.com/loribonna/onedrivedownloader',
-    # I explain this later on
-    download_url='',
+    download_url='https://github.com/loribonna/onedrivedownloader/archive/refs/tags/v_01.zip',
     keywords=['onedrive', 'downloader', 'python'],
-    install_requires=[            # I get to this in a second
-        'validators',
-        'beautifulsoup4',
+    install_requires=[
+        'requests',
+        'zipfile',
+        'tqdm'
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
