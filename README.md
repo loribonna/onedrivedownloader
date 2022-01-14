@@ -2,8 +2,7 @@
 
 ## Requires
 - `tqdm`: for nice progress bar
-- `requests`: pretty obvious
-- `zipfile`: for extracting zip files
+- `requests`: fetch data from OneDrive
 
 ## Usage
 `from onedrivedownloader import download`
