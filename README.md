@@ -6,7 +6,9 @@
 
 ## Usage
 `from onedrivedownloader import download`
+
 and
+
 `download(url: str, path: str = None, unzip=False, unzip_path: str = None, force_download=False, force_unzip=False, clean=False)`
 
 Defaults are:

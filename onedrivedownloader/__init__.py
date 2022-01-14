@@ -1,0 +1,1 @@
+from onedrivedownloader.main import download
