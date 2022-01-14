@@ -5,6 +5,9 @@ import os
 import shutil
 
 def _create_if_not_exists(path: str, remove=True) -> None:
+    if path is None:
+        return
+        
     if os.path.exists(path):
         if not remove:
             return
@@ -71,9 +74,8 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
             assert filename.endswith(".zip"), "ERROR: file is not a zip file!"
 
             clean_unzip_path = unzip_path is not None and os.path.realpath(unzip_path) not in os.path.realpath(filename)
-            unzip_path = parent_path if unzip_path is None else unzip_path
     
-            if not os.path.exists(unzip_path) or force_unzip:
+            if unzip_path is None or not os.path.exists(unzip_path) or force_unzip:
                 print("Extracting files...")
 
                 _create_if_not_exists(unzip_path, remove=clean_unzip_path)
@@ -91,4 +93,4 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
 if __name__ == "__main__":
     ln = "https://unimore365-my.sharepoint.com/:u:/g/personal/215580_unimore_it/EUmqgpzRz3tPlD2KiVNRqdABBJl7qQYcIeROtMc4g2UeIA?e=zZtkLr"
     print('Downloading dataset')
-    download(ln, filename="files.zip", unzip=True, unzip_path="./data", clean=True, force_download=True, force_unzip=True)
+    download(ln, filename="files.zip", unzip=True)

@@ -2,13 +2,13 @@ from distutils.core import setup
 setup(
     name='onedrivedownloader',
     packages=['onedrivedownloader'],
-    version='0.3.1',
+    version='1.0.0',
     license='MIT',
     description='Python utility to download files through OneDrive',
     author='Lorenzo Bonicelli',
     author_email='loribonna@gmail.com',
     url='https://github.com/loribonna/onedrivedownloader',
-    download_url='https://github.com/loribonna/onedrivedownloader/archive/refs/tags/v0.3.1.zip',
+    download_url='https://github.com/loribonna/onedrivedownloader/archive/refs/tags/v1.0.0.zip',
     keywords=['onedrive', 'downloader', 'python', 'utility'],
     install_requires=[
         'requests',
