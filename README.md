@@ -1,6 +1,12 @@
 # OneDrive downloader: python utility to download files from OneDrive
 
-## Requires
+
+## Install (PyPI)
+`pip install onedrivedownloader`
+
+First stable release: `1.0.0`
+
+### Requires
 - `tqdm`: for nice progress bar
 - `requests`: fetch data from OneDrive
 
@@ -25,4 +31,8 @@ download(url: str, filename: str, unzip=False, unzip_path: str = None, force_dow
 - `clean`: clean source file after unzip?
 
 ## Example
-`download("https://<stuff>.sharepoint.com/<path>?download=1", filename="files.zip", unzip=True, unzip_path="./data")`
+```
+ln = "https://unimore365-my.sharepoint.com/:u:/g/personal/215580_unimore_it/EUmqgpzRz3tPlD2KiVNRqdABBJl7qQYcIeROtMc4g2UeIA?e=zZtkLr"
+
+download(ln, filename="file.zip", unzip=True, unzip_path="./data")
+```
