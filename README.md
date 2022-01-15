@@ -27,7 +27,6 @@ download(url: str, filename: str, unzip=False, unzip_path: str = None, force_dow
 - `unzip`: want to unzip file or just download? Requires files to be `.zip` if True. (default: False)
 - `unzip_path`: path to unzip files (default: current directory)
 - `force_download`: force files download if exist? (default: False)
-- `force_unzip`: force files unzip if `unzip_path` exists? (default: False)
 - `clean`: clean source file after unzip?
 
 ## Example
