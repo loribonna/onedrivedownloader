@@ -6,6 +6,10 @@
 
 First stable release: `1.0.0`
 
+Current: `1.0.2`
+
+*Do not require authentication.*
+
 ### Requires
 - `tqdm`: for nice progress bar
 - `requests`: fetch data from OneDrive
