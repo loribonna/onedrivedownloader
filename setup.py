@@ -2,13 +2,11 @@ from setuptools import setup, find_packages
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
-with open("requirements.txt", "r", encoding="utf-8") as fh:
-    requirements = fh.read()
 
 setup(
     name='onedrivedownloader',
     packages=find_packages(),
-    version='1.0.2',
+    version='1.0.3',
     license='MIT',
     description='Python utility to download files through OneDrive',
     long_description=long_description,
@@ -16,9 +14,9 @@ setup(
     author='Lorenzo Bonicelli',
     author_email='loribonna@gmail.com',
     url='https://github.com/loribonna/onedrivedownloader',
-    download_url='https://github.com/loribonna/onedrivedownloader/archive/refs/tags/v1.0.2.zip',
+    download_url='https://github.com/loribonna/onedrivedownloader/archive/refs/tags/v1.0.3.zip',
     keywords=['onedrive', 'downloader', 'download', 'python', 'utility'],
-    install_requires=[requirements],
+    install_requires=["requests","tqdm"],
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
