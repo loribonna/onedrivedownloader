@@ -39,6 +39,8 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
     :param force_unzip: Whether to force unzip and overwrite the file even if it already exists.
     :param clean: Whether to clean the unzipped files after unzipping.
     """
+    assert url is not None, "URL cannot be None!"
+    assert filename is not None, "Parameter filename cannot be None!"
 
     if not url.endswith("?download=1"):
         # replace everithing after the last ? with ?download=1
@@ -46,6 +48,11 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
 
     try:
         response = requests.get(url, stream=True)
+        fname = response.url.split("id=")[-1].split("&")[0].split("%2F")[-1]
+
+        if os.path.split(filename)[-1] == '' or '.' not in os.path.split(filename)[-1]:
+            filename = os.path.join(filename, fname)
+
         total_size_in_bytes = int(response.headers.get('content-length', 0))
         progress_bar = tqdm(total=total_size_in_bytes, unit='iB', unit_scale=True) if total_size_in_bytes > 1024 else None
         block_size = 1024
@@ -68,23 +75,22 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
 
         # unzip file if necessary
         if unzip:
-            assert filename.endswith(".zip"), "ERROR: file is not a zip file!"
+            if filename.endswith(".zip"):
+                unzip_path = unzip_path if unzip_path is not None else os.path.split(filename)[0]
+                clean_unzip_path = force_unzip and os.path.realpath(unzip_path) not in os.path.realpath(filename)
+        
+                _create_if_not_exists(unzip_path, remove=clean_unzip_path)
 
-            unzip_path = unzip_path if unzip_path is not None else os.path.split(filename)[0]
-            clean_unzip_path = force_unzip and os.path.realpath(unzip_path) not in os.path.realpath(filename)
-    
-            _create_if_not_exists(unzip_path, remove=clean_unzip_path)
+                if force_unzip:
+                    print("Warning: overwriting existing files!")
 
-            if force_unzip:
-                print("Warning: overwriting existing files!")
+                with zipfile.ZipFile(filename, 'r') as zip_ref:
+                    for file in tqdm(iterable=zip_ref.namelist(), total=len(zip_ref.namelist()), desc="Extracting files"):
+                        if not os.path.exists(os.path.join(unzip_path, file)) or force_unzip:
+                            zip_ref.extract(member=file, path=unzip_path)
 
-            with zipfile.ZipFile(filename, 'r') as zip_ref:
-                for file in tqdm(iterable=zip_ref.namelist(), total=len(zip_ref.namelist()), desc="Extracting files"):
-                    if not os.path.exists(os.path.join(unzip_path, file)) or force_unzip:
-                        zip_ref.extract(member=file, path=unzip_path)
-
-            if clean:
-                os.remove(filename)
+                if clean:
+                    os.remove(filename)
 
     except Exception as e:
         print(e)

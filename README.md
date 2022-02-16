@@ -6,7 +6,7 @@
 
 First stable release: `1.0.0`
 
-Current: `1.0.3`
+Current: `1.0.4`
 
 *Do not require authentication.*
 
@@ -28,7 +28,7 @@ download(url: str, filename: str, unzip=False, unzip_path: str = None, force_dow
 - `filename`: The filename to save the file as.
 
 ### Optional parameters:
-- `unzip`: want to unzip file or just download? Requires files to be `.zip` if True. (default: False)
+- `unzip`: want to unzip file or just download? If file is not `.zip`, do nothing.
 - `unzip_path`: path to unzip files (default: current directory)
 - `force_download`: force files download if exist? (default: False)
 - `clean`: clean source file after unzip?
