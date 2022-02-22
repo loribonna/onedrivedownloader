@@ -26,7 +26,7 @@ def _create_if_not_exists(path: str, remove=True) -> None:
 
     os.makedirs(path, exist_ok=True)
 
-def download(url: str, filename: str, unzip=False, unzip_path: str = None, force_download=False, force_unzip=False, clean=False) -> None:
+def download(url: str, filename: str, unzip=False, unzip_path: str = None, force_download=False, force_unzip=False, clean=False) -> str:
     """
     Download a file from a OneDrive url.
 
@@ -38,9 +38,13 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
     :param force_download: Whether to force download the file even if it already exists.
     :param force_unzip: Whether to force unzip and overwrite the file even if it already exists.
     :param clean: Whether to clean the unzipped files after unzipping.
+
+    :returns: Path of the downloaded (and extracted if 'unzip') file.
     """
     assert url is not None, "URL cannot be None!"
     assert filename is not None, "Parameter filename cannot be None!"
+
+    ret_path = None
 
     if not url.endswith("?download=1"):
         # replace everithing after the last ? with ?download=1
@@ -59,6 +63,8 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
         total_size_in_bytes = int(response.headers.get('content-length', 0))
         progress_bar = tqdm(total=total_size_in_bytes, unit='iB', unit_scale=True) if total_size_in_bytes > 1024 else None
         block_size = 1024
+
+        ret_path = filename
 
         if not os.path.exists(filename) or force_download:
             _create_if_not_exists(filename)
@@ -81,7 +87,8 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
             if filename.endswith(".zip"):
                 unzip_path = unzip_path if unzip_path is not None else os.path.split(filename)[0]
                 clean_unzip_path = force_unzip and os.path.realpath(unzip_path) not in os.path.realpath(filename)
-        
+                ret_path = unzip_path
+
                 _create_if_not_exists(unzip_path, remove=clean_unzip_path)
 
                 if force_unzip:
@@ -95,6 +102,7 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
                 if clean:
                     os.remove(filename)
 
+        return ret_path
     except Exception as e:
         print(e)
         raise Exception("ERROR, something went wrong, see error above!")
@@ -103,4 +111,5 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
 if __name__ == "__main__":
     ln = "https://unimore365-my.sharepoint.com/:u:/g/personal/215580_unimore_it/EQ-DxzGOF7lBt90A601kvVEBR_ca9PtUdN_asesZ-F80bw?download=1"
     print('Downloading dataset')
-    download(ln, filename="./tmp/", unzip=True)
+    ret = download(ln, filename="./tmp/", unzip=True)
+    print(ret)
