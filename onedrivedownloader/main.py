@@ -48,7 +48,10 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
 
     try:
         response = requests.get(url, stream=True)
-        fname = response.url.split("id=")[-1].split("&")[0].split("%2F")[-1]
+        if 'id=' in response.url and '&' in response.url:
+            fname = response.url.split("id=")[-1].split("&")[0].split("%2F")[-1]
+        else:
+            fname = response.url.split('/')[-1]
 
         if os.path.split(filename)[-1] == '' or '.' not in os.path.split(filename)[-1]:
             filename = os.path.join(filename, fname)
@@ -98,6 +101,6 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
 
 
 if __name__ == "__main__":
-    ln = "https://unimore365-my.sharepoint.com/:u:/g/personal/215580_unimore_it/EUmqgpzRz3tPlD2KiVNRqdABBJl7qQYcIeROtMc4g2UeIA?e=zZtkLr"
+    ln = "https://unimore365-my.sharepoint.com/:u:/g/personal/215580_unimore_it/EQ-DxzGOF7lBt90A601kvVEBR_ca9PtUdN_asesZ-F80bw?download=1"
     print('Downloading dataset')
-    download(ln, filename="files.zip", unzip=True)
+    download(ln, filename="./tmp/", unzip=True)
