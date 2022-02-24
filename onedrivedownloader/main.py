@@ -1,6 +1,7 @@
 import requests
 from tqdm import tqdm
 import zipfile
+import tarfile
 import os
 import shutil
 
@@ -26,7 +27,7 @@ def _create_if_not_exists(path: str, remove=True) -> None:
 
     os.makedirs(path, exist_ok=True)
 
-def download(url: str, filename: str, unzip=False, unzip_path: str = None, force_download=False, force_unzip=False, clean=False) -> str:
+def download(url: str, filename: str, unzip=True, unzip_path: str = None, force_download=False, force_unzip=False, clean=False) -> str:
     """
     Download a file from a OneDrive url.
 
@@ -84,7 +85,7 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
 
         # unzip file if necessary
         if unzip:
-            if filename.endswith(".zip"):
+            if filename.endswith(".zip") or filename.endswith(".tar.gz"):
                 unzip_path = unzip_path if unzip_path is not None else os.path.split(filename)[0]
                 clean_unzip_path = force_unzip and os.path.realpath(unzip_path) not in os.path.realpath(filename)
                 ret_path = unzip_path
@@ -94,10 +95,16 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
                 if force_unzip:
                     print("Warning: overwriting existing files!")
 
-                with zipfile.ZipFile(filename, 'r') as zip_ref:
-                    for file in tqdm(iterable=zip_ref.namelist(), total=len(zip_ref.namelist()), desc="Extracting files"):
-                        if not os.path.exists(os.path.join(unzip_path, file)) or force_unzip:
-                            zip_ref.extract(member=file, path=unzip_path)
+                if filename.endswith(".zip"):
+                    with zipfile.ZipFile(filename, 'r') as zip_ref:
+                        for file in tqdm(iterable=zip_ref.namelist(), total=len(zip_ref.namelist()), desc="Extracting files"):
+                            if not os.path.exists(os.path.join(unzip_path, file)) or force_unzip:
+                                zip_ref.extract(member=file, path=unzip_path)
+                elif filename.endswith(".tar.gz"):
+                    with tarfile.open(filename, 'r:gz') as tar_ref:
+                        for file in tqdm(iterable=tar_ref.getnames(), total=len(tar_ref.getnames()), desc="Extracting files"):
+                            if not os.path.exists(os.path.join(unzip_path, file)) or force_unzip:
+                                tar_ref.extract(member=file, path=unzip_path)
 
                 if clean:
                     os.remove(filename)
@@ -109,7 +116,7 @@ def download(url: str, filename: str, unzip=False, unzip_path: str = None, force
 
 
 if __name__ == "__main__":
-    ln = "https://unimore365-my.sharepoint.com/:u:/g/personal/215580_unimore_it/EQ-DxzGOF7lBt90A601kvVEBR_ca9PtUdN_asesZ-F80bw?download=1"
+    ln = 'https://unimore365-my.sharepoint.com/:u:/g/personal/215580_unimore_it/EdD9BE-36ohCpMy0_EKyYb0BnnSnrP7g8TOqTaeYsy-FCA?e=OJVriO'
     print('Downloading dataset')
-    ret = download(ln, filename="./tmp/", unzip=True)
+    ret = download(ln, filename="./tmp/", clean=True)
     print(ret)
