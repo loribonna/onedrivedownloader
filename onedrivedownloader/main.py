@@ -46,17 +46,28 @@ def download(url: str, filename: str, unzip=True, unzip_path: str = None, force_
     assert filename is not None, "Parameter filename cannot be None!"
 
     ret_path = None
+    embed=False
 
-    if not url.endswith("?download=1"):
+    if 'iframe' in url:
+        url = url.split('src="')[1].split('"')[0]
+
+    if 'embed' in url:
+        url = url.replace('embed', 'download')
+        embed=True
+    elif not url.endswith("?download=1"):
         # replace everithing after the last ? with ?download=1
         url = url.split("?")[0] + "?download=1"
 
     try:
         response = requests.get(url, stream=True)
-        if 'id=' in response.url and '&' in response.url:
-            fname = response.url.split("id=")[-1].split("&")[0].split("%2F")[-1]
+
+        if not embed:
+            if 'id=' in response.url and '&' in response.url:
+                fname = response.url.split("id=")[-1].split("&")[0].split("%2F")[-1]
+            else:
+                fname = response.url.split('/')[-1]
         else:
-            fname = response.url.split('/')[-1]
+            fname = response.url.split('/')[-1].split('?')[0]
 
         if os.path.split(filename)[-1] == '' or '.' not in os.path.split(filename)[-1]:
             filename = os.path.join(filename, fname)
@@ -116,7 +127,8 @@ def download(url: str, filename: str, unzip=True, unzip_path: str = None, force_
 
 
 if __name__ == "__main__":
-    ln = 'https://unimore365-my.sharepoint.com/:u:/g/personal/215580_unimore_it/EdD9BE-36ohCpMy0_EKyYb0BnnSnrP7g8TOqTaeYsy-FCA?e=OJVriO'
+    ln = 'https://unimore365-my.sharepoint.com/:u:/g/personal/215580_unimore_it/Eb4BgDZ5g_1Imuwz_PJAmdgBc8k9I_P5p0Y-A97edhsxIw?e=WmlZZc'
+    ln2 = '<iframe src="https://onedrive.live.com/embed?cid=D3924A2D106E0039&resid=D3924A2D106E0039%21110&authkey=AIEfi5nlRyY1yaE" width="98" height="120" frameborder="0" scrolling="no"></iframe>'
     print('Downloading dataset')
-    ret = download(ln, filename="./tmp/", clean=True)
+    ret = download(ln2, filename="./tmp/", clean=True)
     print(ret)
