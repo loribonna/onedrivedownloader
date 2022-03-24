@@ -6,7 +6,7 @@
 
 First stable release: `1.0.0`
 
-Current: `1.1.1`
+Current: `1.1.2`
 
 *Do not require authentication.*
 

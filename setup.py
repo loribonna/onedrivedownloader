@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name='onedrivedownloader',
     packages=find_packages(),
-    version='1.1.1',
+    version='1.1.2',
     license='MIT',
     description='Python utility to download files through OneDrive',
     long_description=long_description,
@@ -14,7 +14,7 @@ setup(
     author='Lorenzo Bonicelli',
     author_email='loribonna@gmail.com',
     url='https://github.com/loribonna/onedrivedownloader',
-    download_url='https://github.com/loribonna/onedrivedownloader/archive/refs/tags/v1.1.1.zip',
+    download_url='https://github.com/loribonna/onedrivedownloader/archive/refs/tags/v1.1.2.zip',
     keywords=['onedrive', 'downloader', 'download', 'python', 'utility'],
     install_requires=["requests","tqdm"],
     classifiers=[

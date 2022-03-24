@@ -73,12 +73,13 @@ def download(url: str, filename: str, unzip=True, unzip_path: str = None, force_
             filename = os.path.join(filename, fname)
 
         total_size_in_bytes = int(response.headers.get('content-length', 0))
-        progress_bar = tqdm(total=total_size_in_bytes, unit='iB', unit_scale=True) if total_size_in_bytes > 1024 else None
         block_size = 1024
 
         ret_path = filename
 
         if not os.path.exists(filename) or force_download:
+            progress_bar = tqdm(total=total_size_in_bytes, unit='iB', unit_scale=True) if total_size_in_bytes > 1024 else None
+
             _create_if_not_exists(filename)
 
             with open(filename, 'wb') as f:
@@ -97,6 +98,7 @@ def download(url: str, filename: str, unzip=True, unzip_path: str = None, force_
         # unzip file if necessary
         if unzip:
             if filename.endswith(".zip") or filename.endswith(".tar.gz"):
+                print("Unzipping file...")
                 unzip_path = unzip_path if unzip_path is not None else os.path.split(filename)[0]
                 clean_unzip_path = force_unzip and os.path.realpath(unzip_path) not in os.path.realpath(filename)
                 ret_path = unzip_path
