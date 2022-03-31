@@ -63,9 +63,9 @@ def download(url: str, filename: str, unzip=True, unzip_path: str = None, force_
 
         if not embed:
             if 'id=' in response.url and '&' in response.url:
-                fname = response.url.split("id=")[-1].split("&")[0].split("%2F")[-1]
+                fname = response.url.split("id=")[-1].split("&")[0].split("%2F")[-1].split('?')[0]
             else:
-                fname = response.url.split('/')[-1]
+                fname = response.url.split('/')[-1].split('?')[0]
         else:
             fname = response.url.split('/')[-1].split('?')[0]
 
